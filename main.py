@@ -66,12 +66,14 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
+
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     try:
-        return templates.TemplateResponse("index.html", {"request": request})
+        # 新版标准语法：必须明确将 request 放入 context 字典中作为独立参数传入
+        context = {"request": request}
+        return templates.TemplateResponse(name="index.html", context=context)
     except Exception as e:
-        # 如果再次出错，直接把错误弹出来，不抛出硬硬的 Internal Server Error
         return HTMLResponse(content=f"<h3>基地核心启动失败，错误原因:</h3><pre>{str(e)}</pre>", status_code=500)
 
 
