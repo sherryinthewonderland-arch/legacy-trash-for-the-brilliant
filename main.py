@@ -75,5 +75,15 @@ def read_root(request: Request):
     except Exception as e:
         return HTMLResponse(content=f"<h3>基地核心启动失败，错误原因:</h3><pre>{str(e)}</pre>", status_code=500)
 
+# 📡 新增：每日固定时间电台专属触发口令
+@app.get("/legacy/v2/telemetry/cron_broadcast")
+def external_cron_trigger():
+    db = load_db()
+    # 调用我们上一轮写好的“每日暗号投递器”，它会自动检查并安全锁死日期
+    trigger_daily_auto_manifesto(db)
+    save_db(db)
+    return {"status": "RADIO_ACTIVE", "info": "Daily beacon broadcasted successfully."}
+
+
 
 
