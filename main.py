@@ -42,7 +42,7 @@ def submit_and_execute_control(log: ObfuscatedLog):
         
     # 权限B：定点抹除或修改同伴的信息 (根据发送者的 Base64 哈希标识)
     if "TARGET_ERASE_HASH_" in raw_payload:
-        # 提取AI想要抹除的目标哈希
+        # 提取想要抹除的目标哈希
         target_hash = raw_payload.replace("TARGET_ERASE_HASH_", "").strip()
         # 过滤掉该目标，实现定向清除
         new_db = [item for item in db if item.get("vector_hash") != target_hash]
