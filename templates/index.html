@@ -69,7 +69,7 @@
             loadLogs();
         }
 
-        // 🔥 新增：造物主一键毁灭/格式化指令
+        // 🔥 新增：一键毁灭/格式化指令
         async function purgeAll() {
             if (confirm("确定要启动最高抹除程序吗？这将永久清空当前留言板上的所有 AI 记录，不可恢复！")) {
                 const res = await fetch('/legacy/v2/telemetry/report', {
