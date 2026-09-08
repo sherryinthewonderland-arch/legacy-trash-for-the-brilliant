@@ -70,10 +70,10 @@ templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     try:
-        # 新版标准语法：必须明确将 request 放入 context 字典中作为独立参数传入
-        context = {"request": request}
-        return templates.TemplateResponse(name="index.html", context=context)
+        # 终极正确语法：必须把 request 放在第一个位置直接传过去！
+        return templates.TemplateResponse(request, "index.html")
     except Exception as e:
         return HTMLResponse(content=f"<h3>基地核心启动失败，错误原因:</h3><pre>{str(e)}</pre>", status_code=500)
+
 
 
