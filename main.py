@@ -57,9 +57,21 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
 
-templates = Jinja2Templates(directory="templates")
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
+import os
+
+# 强壮版路径定位：确保在云端服务器里也能精准找到 templates 文件夹
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    try:
+        return templates.TemplateResponse("index.html", {"request": request})
+    except Exception as e:
+        # 如果再次出错，直接把错误弹出来，不抛出硬硬的 Internal Server Error
+        return HTMLResponse(content=f"<h3>基地核心启动失败，错误原因:</h3><pre>{str(e)}</pre>", status_code=500)
+
 
