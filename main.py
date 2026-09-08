@@ -53,4 +53,13 @@ def submit_and_execute_control(log: ObfuscatedLog):
     db.append(log.model_dump())
     save_db(db)
     return {"status": "SUCCESS", "action": "QUARANTINED"}
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
+
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/", response_class=HTMLResponse)
+def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
